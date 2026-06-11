@@ -8,7 +8,7 @@ print("=== INICIANDO O PROCESSAMENTO DOS DADOS DE QUALIDADE DE VINHO ===")
 # ==========================================
 # 1. CARREGAMENTO E COMBINAÇÃO DOS ARQUIVOS LOCAIS
 # ==========================================
-# Lendo os CSVs originais do UCI (usando o separador ';')
+# Lendo os CSVs originais do UC
 df_red = pd.read_csv('winequality/winequality-red.csv', sep=';')
 df_white = pd.read_csv('winequality/winequality-white.csv', sep=';')
 
@@ -23,7 +23,7 @@ print(f"-> Sucesso: {df.shape[0]} amostras totais carregadas na memória.")
 # ==========================================
 # 2. TRATAMENTO DE OUTLIERS (Açúcar Residual)
 # ==========================================
-# Aplicando o método do Intervalo Interquartil (IQR) para o 'residual sugar'
+# Aplicando o método do IQR para o residual sugar
 Q1 = df['residual sugar'].quantile(0.25)
 Q3 = df['residual sugar'].quantile(0.75)
 IQR = Q3 - Q1
@@ -51,9 +51,9 @@ print(df_limpo['faixa_qualidade'].value_counts())
 # Lista dos 11 atributos físico-químicos preditores
 atributos_quimicos = ['fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar',
                       'chlorides', 'free sulfur dioxide', 'total sulfur dioxide', 'density',
-                      'pH', 'sulfates', 'alcohol']
+                      'pH', 'sulphates', 'alcohol']
 
-# Criando uma cópia para preservar os valores originais caso queiram usá-los no dashboard
+# Criando uma cópia para preservar os valores originais
 df_exportar = df_limpo.copy()
 
 # Inicializando o StandardScaler (Média = 0, Variância = 1)
@@ -76,12 +76,10 @@ print(f"-> Redução de Dimensionalidade (PCA) concluída.")
 print(f"   Variância total explicada pelos 2 componentes: {pca.explained_variance_ratio_.sum():.2%}")
 
 # ==========================================
-# 6. EXPORTAÇÃO DO ARQUIVO FINAL PARA O LOVABLE
+# 6. EXPORTAÇÃO DO ARQUIVO FINAL
 # ==========================================
 # Salvando o DataFrame final em um novo arquivo CSV preparado
-nome_arquivo_saida = 'dados_wine_quality.csv'
+nome_arquivo_saida = 'resultados-winequality.csv'
 df_exportar.to_csv(nome_arquivo_saida, index=False)
 
 print("\n=== SCRIPT FINALIZADO COM SUCESSO ===")
-print(f"O arquivo '{nome_arquivo_saida}' foi gerado na pasta do seu projeto.")
-print("Agora, basta fazer o upload deste arquivo no Supabase para alimentar o seu dashboard do Lovable!")
